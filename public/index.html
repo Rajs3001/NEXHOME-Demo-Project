@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexHome - Direct Buyer-Seller Real Estate Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <header class="main-nav">
+        <div class="nav-container">
+            <div class="nav-left">
+                <div class="logo" onclick="showHome()">
+                    <i class="fas fa-home"></i>
+                    <span>NexHome</span>
+                </div>
+                <nav class="nav-links">
+                    <a href="#" onclick="showBuyProperties(); return false;">Buy</a>
+                    <a href="#" onclick="showRentProperties(); return false;">Rent</a>
+                    <a href="#" onclick="showSellPage(); return false;">Sell</a>
+                    <a href="#" onclick="showTools(); return false;">Tools</a>
+                </nav>
+            </div>
+            <div class="nav-right">
+                <button class="btn-icon" onclick="showAIAssistant()" title="AI Assistant">
+                    <i class="fas fa-robot"></i>
+                </button>
+                <button class="btn-icon" onclick="showFavorites()" title="Favorites">
+                    <i class="far fa-heart"></i>
+                    <span id="favorites-count" class="badge-count">0</span>
+                </button>
+                <div id="user-menu" class="user-menu hidden">
+                    <button class="btn-primary" onclick="showLoginModal()">Login</button>
+                    <button class="btn-secondary" onclick="showRegisterModal()">Sign Up</button>
+                </div>
+                <div id="logged-in-menu" class="logged-in-menu hidden">
+                    <div class="user-dropdown">
+                        <button class="user-btn" onclick="toggleUserDropdown()">
+                            <i class="fas fa-user-circle"></i>
+                            <span id="user-name">User</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div id="user-dropdown-menu" class="dropdown-menu hidden">
+                            <a href="#" onclick="showDashboard(); return false;"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                            <a href="#" onclick="showMyProperties(); return false;"><i class="fas fa-home"></i> My Properties</a>
+                            <a href="#" onclick="showInquiries(); return false;"><i class="fas fa-envelope"></i> Inquiries</a>
+                            <a href="#" onclick="logout(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeLoginModal()">&times;</span>
+            <h2>Login to NexHome</h2>
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn-primary btn-block">Login</button>
+                <p class="text-center">Don't have an account? <a href="#" onclick="closeLoginModal(); showRegisterModal(); return false;">Sign Up</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeRegisterModal()">&times;</span>
+            <h2>Create Account</h2>
+            <form id="register-form" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="register-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" id="register-phone">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="register-password" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label>I want to</label>
+                    <select id="register-user-type" required>
+                        <option value="">Select...</option>
+                        <option value="buyer">Buy/Rent Properties</option>
+                        <option value="seller">Sell/List Properties</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary btn-block">Create Account</button>
+                <p class="text-center">Already have an account? <a href="#" onclick="closeRegisterModal(); showLoginModal(); return false;">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- AI Assistant Modal -->
+    <div id="ai-modal" class="modal hidden">
+        <div class="modal-content ai-modal-content">
+            <span class="close-modal" onclick="closeAIModal()">&times;</span>
+            <h2><i class="fas fa-robot"></i> AI Assistant</h2>
+            <div id="ai-chat" class="ai-chat">
+                <div class="ai-message">
+                    <i class="fas fa-robot"></i>
+                    <p>Hello! I'm your NexHome AI assistant. I can help you with property searches, pricing, loans, and general real estate questions. How can I assist you today?</p>
+                </div>
+            </div>
+            <div class="ai-input-container">
+                <input type="text" id="ai-input" placeholder="Ask me anything about properties..." onkeypress="if(event.key==='Enter') sendAIMessage()">
+                <button onclick="sendAIMessage()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Home Page -->
+        <section id="page-home" class="page">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h1 class="hero-title">Find Your Dream Home<br>Without Brokers</h1>
+                    <p class="hero-subtitle">Connect directly with property owners. No middlemen, no hidden fees.</p>
+                    <div class="search-hero">
+                        <div class="search-tabs">
+                            <button class="tab-btn active" onclick="setSearchType('buy')">Buy</button>
+                            <button class="tab-btn" onclick="setSearchType('rent')">Rent</button>
+                        </div>
+                        <div class="search-box-large">
+                            <input type="text" id="hero-search" placeholder="Enter city, area, or locality">
+                            <button class="btn-primary btn-search" onclick="performSearch()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                        <div class="quick-filters">
+                            <select id="filter-city">
+                                <option value="">All Cities</option>
+                                <option value="Manhattan">Manhattan</option>
+                                <option value="Brooklyn">Brooklyn</option>
+                                <option value="Queens">Queens</option>
+                            </select>
+                            <select id="filter-type">
+                                <option value="">All Types</option>
+                                <option value="House">House</option>
+                                <option value="Condo">Condo</option>
+                                <option value="Apartment">Apartment</option>
+                            </select>
+                            <input type="number" id="filter-bedrooms" placeholder="Beds" min="0">
+                            <input type="number" id="filter-price-min" placeholder="Min Price">
+                            <input type="number" id="filter-price-max" placeholder="Max Price">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Featured Properties</h2>
+                    <a href="#" onclick="showAllProperties(); return false;">View All</a>
+                </div>
+                <div id="featured-properties" class="property-grid">
+                    <!-- Properties will be loaded here -->
+                </div>
+            </div>
+
+            <div class="content-section bg-light">
+                <div class="tools-section">
+                    <h2>Property Tools</h2>
+                    <div class="tools-grid">
+                        <div class="tool-card" onclick="showValuationTool()">
+                            <i class="fas fa-calculator"></i>
+                            <h3>Property Valuation</h3>
+                            <p>Get instant property value estimates</p>
+                        </div>
+                        <div class="tool-card" onclick="showLoanTool()">
+                            <i class="fas fa-dollar-sign"></i>
+                            <h3>Loan Calculator</h3>
+                            <p>Calculate your monthly mortgage payments</p>
+                        </div>
+                        <div class="tool-card" onclick="showAIAssistant()">
+                            <i class="fas fa-robot"></i>
+                            <h3>AI Assistant</h3>
+                            <p>Get instant answers to your questions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Results Page -->
+        <section id="page-search" class="page hidden">
+            <div class="search-header">
+                <h2 id="search-results-title">Search Results</h2>
+                <div class="search-filters-bar">
+                    <select id="sort-by">
+                        <option value="newest">Newest First</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                    </select>
+                </div>
+            </div>
+            <div id="search-results" class="property-grid">
+                <!-- Results will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Property Details Page -->
+        <section id="page-details" class="page hidden">
+            <div id="property-details-content">
+                <!-- Details will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Sell/List Property Page -->
+        <section id="page-sell" class="page hidden">
+            <div class="content-section">
+                <h2>List Your Property</h2>
+                <form id="list-property-form" onsubmit="handleListProperty(event)" class="property-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Property Title *</label>
+                            <input type="text" id="prop-title" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Property Type *</label>
+                            <select id="prop-type" required>
+                                <option value="">Select...</option>
+                                <option value="House">House</option>
+                                <option value="Condo">Condo</option>
+                                <option value="Apartment">Apartment</option>
+                                <option value="Townhouse">Townhouse</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Listing Type *</label>
+                            <select id="prop-listing-type" required>
+                                <option value="">Select...</option>
+                                <option value="sale">For Sale</option>
+                                <option value="rent">For Rent</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Price *</label>
+                            <input type="number" id="prop-price" required min="0" step="0.01">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="prop-description" rows="4"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Address *</label>
+                            <input type="text" id="prop-address" required>
+                        </div>
+                        <div class="form-group">
+                            <label>City *</label>
+                            <input type="text" id="prop-city" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>State *</label>
+                            <input type="text" id="prop-state" required>
+                        </div>
+                        <div class="form-group">
+                            <label>ZIP Code</label>
+                            <input type="text" id="prop-zip">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Bedrooms</label>
+                            <input type="number" id="prop-bedrooms" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Bathrooms</label>
+                            <input type="number" id="prop-bathrooms" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Area (sqft)</label>
+                            <input type="number" id="prop-area" min="0">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Year Built</label>
+                            <input type="number" id="prop-year" min="1800" max="2024">
+                        </div>
+                        <div class="form-group">
+                            <label>Parking Spaces</label>
+                            <input type="number" id="prop-parking" min="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Image URL</label>
+                        <input type="url" id="prop-image" placeholder="https://example.com/image.jpg">
+                    </div>
+                    <button type="submit" class="btn-primary">List Property</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Dashboard Page -->
+        <section id="page-dashboard" class="page hidden">
+            <div class="content-section">
+                <h2>My Dashboard</h2>
+                <div id="dashboard-content">
+                    <!-- Dashboard content will be loaded here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Valuation Tool Modal -->
+    <div id="valuation-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeValuationModal()">&times;</span>
+            <h2>Property Valuation</h2>
+            <form id="valuation-form" onsubmit="handleValuation(event)">
+                <div class="form-group">
+                    <label>Property Type</label>
+                    <select id="val-type" required>
+                        <option value="House">House</option>
+                        <option value="Condo">Condo</option>
+                        <option value="Apartment">Apartment</option>
+                        <option value="Townhouse">Townhouse</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Area (sqft)</label>
+                        <input type="number" id="val-area" required min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" id="val-city" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Bedrooms</label>
+                        <input type="number" id="val-bedrooms" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Bathrooms</label>
+                        <input type="number" id="val-bathrooms" min="0">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Year Built</label>
+                        <input type="number" id="val-year" min="1800">
+                    </div>
+                    <div class="form-group">
+                        <label>Parking</label>
+                        <input type="number" id="val-parking" min="0">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary btn-block">Estimate Value</button>
+            </form>
+            <div id="valuation-result" class="valuation-result hidden"></div>
+        </div>
+    </div>
+
+    <!-- Loan Calculator Modal -->
+    <div id="loan-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeLoanModal()">&times;</span>
+            <h2>Loan Calculator</h2>
+            <form id="loan-form" onsubmit="handleLoanCalculation(event)">
+                <div class="form-group">
+                    <label>Property Price ($)</label>
+                    <input type="number" id="loan-price" required min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Down Payment (%)</label>
+                    <input type="number" id="loan-down" value="20" min="0" max="100" step="0.1">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Interest Rate (%)</label>
+                        <input type="number" id="loan-rate" value="6.5" min="0" max="20" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label>Loan Term (years)</label>
+                        <input type="number" id="loan-term" value="30" min="1" max="40">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary btn-block">Calculate</button>
+            </form>
+            <div id="loan-result" class="loan-result hidden"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+

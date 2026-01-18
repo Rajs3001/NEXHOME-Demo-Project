@@ -1,0 +1,261 @@
+/* Admin Panel Styles */
+
+.admin-container {
+    min-height: 100vh;
+    background: var(--bg-light);
+}
+
+.admin-header {
+    background: var(--white);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.admin-header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-header h1 {
+    font-size: 24px;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.admin-nav {
+    max-width: 1400px;
+    margin: 0 auto 30px;
+    display: flex;
+    gap: 10px;
+    padding: 0 20px;
+}
+
+.nav-tab {
+    padding: 12px 24px;
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-tab:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.nav-tab.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.admin-main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+}
+
+.admin-section {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: var(--shadow);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--border);
+}
+
+.section-header h2 {
+    font-size: 28px;
+    color: var(--text-main);
+}
+
+.section-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.section-actions select {
+    padding: 10px 15px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.properties-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.property-admin-card {
+    background: var(--bg-light);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 0.2s;
+}
+
+.property-admin-card:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow);
+}
+
+.property-admin-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.property-admin-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: var(--text-main);
+}
+
+.property-admin-card .property-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.property-admin-card .property-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+}
+
+.property-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.property-status.active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.property-status.inactive {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.property-status.sold {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.image-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.image-preview-item {
+    position: relative;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.image-preview-item img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.image-preview-item .remove-image {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: var(--error);
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    background: var(--bg-light);
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    border: 2px solid var(--border);
+}
+
+.stat-card h3 {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-card .stat-value {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+@media (max-width: 768px) {
+    .admin-nav {
+        flex-direction: column;
+    }
+    
+    .properties-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+}
+
